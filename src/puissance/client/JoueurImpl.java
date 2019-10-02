@@ -1,7 +1,13 @@
 package puissance.client;
 
+import java.net.MalformedURLException;
+import java.rmi.ConnectException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+
+import javax.swing.JOptionPane;
 
 import puissance.server.Information;
 
@@ -11,6 +17,8 @@ public class JoueurImpl extends UnicastRemoteObject implements JoueurRemote{
 	protected Information information;
 	JoueurGUI joueurGUI;
 	
+	protected boolean connectionProblem = false;
+	
 	protected JoueurImpl(JoueurGUI joueurGUI, String userName) throws RemoteException {
 		super();
 		// TODO Auto-generated constructor stub
@@ -19,8 +27,10 @@ public class JoueurImpl extends UnicastRemoteObject implements JoueurRemote{
 	}
 
 	@Override
-	public void messageFromServer() throws RemoteException {
-		// TODO Auto-generated method stub.
+	public void messageFromServer(String message) throws RemoteException {
+		System.out.println( message );
+		joueurGUI.textArea.append( message );
+		joueurGUI.textArea.setCaretPosition(joueurGUI.textArea.getDocument().getLength());
 		
 	}
 
@@ -32,29 +42,6 @@ public class JoueurImpl extends UnicastRemoteObject implements JoueurRemote{
 		joueurGUI.clientPanel.revalidate();
 	}
 	
-
-	public void startClient() throws RemoteException {		
-		String[] details = {name, hostName, clientServiceName};	
-
-		try {
-			Naming.rebind("rmi://" + hostName + "/" + clientServiceName, this);
-			serverIF = ( ChatServerIF )Naming.lookup("rmi://" + hostName + "/" + serviceName);	
-		} 
-		catch (ConnectException  e) {
-			JOptionPane.showMessageDialog(
-					chatGUI.frame, "The server seems to be unavailable\nPlease try later",
-					"Connection problem", JOptionPane.ERROR_MESSAGE);
-			connectionProblem = true;
-			e.printStackTrace();
-		}
-		catch(NotBoundException | MalformedURLException me){
-			connectionProblem = true;
-			me.printStackTrace();
-		}
-		if(!connectionProblem){
-			registerWithServer(details);
-		}	
-		System.out.println("Client Listen RMI Server is running...\n");
-	}
+	
 
 }
