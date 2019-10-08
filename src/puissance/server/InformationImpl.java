@@ -61,5 +61,18 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 			joueursList[i] = joueurs.elementAt(i).getName();
 		}
 		return joueursList;
+	}
+
+	@Override
+	public boolean joueurExistant(String username) throws RemoteException {
+		System.out.println("Invocation de la méthode joueurExistant()");
+		boolean test = false;
+		for(Joueur j : joueurs){
+			if(j.getName().equals(username)){
+				test = true;
+				break;
+			}
+		}
+		return test;
 	}  
 }

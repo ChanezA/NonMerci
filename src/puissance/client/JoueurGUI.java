@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.HeadlessException;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,7 +38,7 @@ public class JoueurGUI extends JFrame implements ActionListener{
 	private JoueurImpl clientImpl;
 	private String name;
     private JoueurImpl joueurImpl;
-    private Information info;
+    private static Information info;
 	
 	private static final long serialVersionUID = 1L;	
 	private JPanel conteneur, conteneur1, conteneur2, inputPanel;
@@ -51,6 +52,15 @@ public class JoueurGUI extends JFrame implements ActionListener{
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		JoueurGUI gui = new JoueurGUI();
+		try {
+			info = (Information) Naming.lookup("//localhost:8080/TestRMI");
+		}  catch (MalformedURLException e) {
+		      e.printStackTrace();
+	    } catch (RemoteException e) {
+	      e.printStackTrace();
+	    } catch (NotBoundException e) {
+	      e.printStackTrace();
+	    }
 	}
 	
 	public JoueurGUI() {
@@ -155,22 +165,33 @@ public class JoueurGUI extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		//get connected to chat service
+		//get connected to service
 		if(e.getSource() == boutonStart){
 			System.out.println("boutonStart");
-			name = textArea.getText();			
-			if(name.length() != 0){
-				frame.setTitle(name + "'s console ");
-				textArea.setText("");
-				textArea.append("username : " + name + " connecting...\n");		
-				
-				getConnected(name);
-				
-				boutonStart.setEnabled(false);
-				boutonJoueur.setEnabled(true);
-			}
-			else{
-				JOptionPane.showMessageDialog(frame, "Enter your name to Start");
+			try {
+				if(!info.joueurExistant(textArea.getText())) {
+					name = textArea.getText();			
+					if(name.length() != 0){
+						frame.setTitle(name + "'s console ");
+						textArea.setText("");
+						textArea.append("username : " + name + " connecting...\n");		
+						
+						info.saveJoueur(name);
+						
+						boutonStart.setEnabled(false);
+						boutonJoueur.setEnabled(true);
+					}
+					else{
+						JOptionPane.showMessageDialog(frame, "Entrez un pseudo pour commencer");
+					}
+				}
+				else{
+					JOptionPane.showMessageDialog(frame, "Pseudo déjà utilisé");
+				}
+			} catch (HeadlessException e1) {
+				e1.printStackTrace();
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
 			}
 		}
 		if(e.getSource() == boutonJoueur) {
@@ -193,19 +214,4 @@ public class JoueurGUI extends JFrame implements ActionListener{
 			e.printStackTrace();
 		}
 	}
-
-	private void getConnected(String username) {
-		try {		
-
-			info = (Information) Naming.lookup("//localhost:8080/TestRMI");
-			info.saveJoueur(username);
-		}  catch (MalformedURLException e) {
-		      e.printStackTrace();
-	    } catch (RemoteException e) {
-	      e.printStackTrace();
-	    } catch (NotBoundException e) {
-	      e.printStackTrace();
-	    }
-	}
-
 }
