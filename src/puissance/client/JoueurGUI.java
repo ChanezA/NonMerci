@@ -47,12 +47,11 @@ public class JoueurGUI extends JFrame implements ActionListener{
     protected JPanel clientPanel, userPanel;
 	protected JTextArea textArea;
 	
-	private Joueur joueur;
+	private static Joueur joueur;
     
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		JoueurGUI gui = new JoueurGUI();
-		gui.setVisible(true);
 	}
 	
 	public JoueurGUI() {
@@ -60,23 +59,25 @@ public class JoueurGUI extends JFrame implements ActionListener{
 		
 		frame.addWindowListener(new java.awt.event.WindowAdapter() {
 	        public void windowClosing(java.awt.event.WindowEvent winEvt) {
-
-				try {
-					info.removeJoueur(joueur);
-				} catch (RemoteException e) {
-					e.printStackTrace();
-				}
+	        	if(joueur != null) {
+					try {
+						System.out.println("debug2 " + joueur);
+						info.removeJoueur(joueur);
+					} catch (RemoteException e) {
+						e.printStackTrace();
+					}		
+	        	}
 	            System.exit(0);
 	        }
 	    });
 		
-		setTitle("Non Merci");
+		//setTitle("Non Merci");
 	
 		//frame.setResizable(false);
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		setLocationRelativeTo(null);
+		//setLocationRelativeTo(null);
 
 		textArea = new JTextArea("Bienvenue, écrivez votre nom et tapez entrée pour commencer");
 		textArea.setLineWrap(true);
@@ -110,13 +111,13 @@ public class JoueurGUI extends JFrame implements ActionListener{
 		frame.pack();
 
 		frame.setAlwaysOnTop(true);
-		frame.setLocation(150, 150);
+		frame.setLocation(300, 300);
 	   	frame.setSize(400, 300);
 		textArea.requestFocus();
 	
 		frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		frame.setVisible(true);
-		
+
 	}
 	
 	private Component getUsersPanel() {

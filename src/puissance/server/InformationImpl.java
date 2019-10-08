@@ -25,13 +25,18 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 
 	public void saveJoueur(Joueur joueur) throws RemoteException {
 		System.out.println("Invocation de la méthode saveJoueur()");
+		System.out.println(joueur);
 		joueurs.addElement(joueur);
+		System.out.println(joueurs);
 	}
 	
 
 	public void removeJoueur(Joueur joueur) throws RemoteException {
 		System.out.println("Invocation de la méthode removeJoueur()");
+		System.out.println(joueur);
+		System.out.println(joueurs);
 		joueurs.removeElement(joueur);
+		System.out.println(joueurs);
 	}
   	
 	@Override
