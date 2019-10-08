@@ -35,20 +35,19 @@ import puissance.server.Joueur;
 public class JoueurGUI extends JFrame implements ActionListener{
 
 	private JoueurImpl clientImpl;
+	private String name;
+    private JoueurImpl joueurImpl;
+    private Information info;
+	
 	private static final long serialVersionUID = 1L;	
 	private JPanel conteneur, conteneur1, conteneur2, inputPanel;
 	private JButton boutonStart, boutonJoueur;
-	private String name;
     private JList<String> list;
     private DefaultListModel<String> listModel;
-    private JoueurImpl joueurImpl;
-    private Information info;
     protected JFrame frame;
     protected JPanel clientPanel, userPanel;
 	protected JTextArea textArea;
-	
-	private static Joueur joueur;
-    
+	    
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		JoueurGUI gui = new JoueurGUI();
@@ -59,10 +58,10 @@ public class JoueurGUI extends JFrame implements ActionListener{
 		
 		frame.addWindowListener(new java.awt.event.WindowAdapter() {
 	        public void windowClosing(java.awt.event.WindowEvent winEvt) {
-	        	if(joueur != null) {
+	        	if(name != null) {
 					try {
-						System.out.println("debug2 " + joueur);
-						info.removeJoueur(joueur);
+						System.out.println("debuger");
+						info.removeJoueur(name);
 					} catch (RemoteException e) {
 						e.printStackTrace();
 					}		
@@ -199,9 +198,7 @@ public class JoueurGUI extends JFrame implements ActionListener{
 		try {		
 
 			info = (Information) Naming.lookup("//localhost:8080/TestRMI");
-			joueur = new Joueur(username);
-			System.out.println("debug " + joueur);
-			info.saveJoueur(joueur);
+			info.saveJoueur(username);
 		}  catch (MalformedURLException e) {
 		      e.printStackTrace();
 	    } catch (RemoteException e) {

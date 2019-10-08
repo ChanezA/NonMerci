@@ -16,8 +16,7 @@ public class MainClient {
 
 		try {
 			Information info = (Information) Naming.lookup("//localhost:8080/TestRMI");
-			System.out.println("truc");
-			info.saveJoueur(new Joueur("user"));
+			info.saveJoueur("user");
 			System.out.println("test");
 			while(true) {
 				

@@ -23,19 +23,21 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 		joueurs = new Vector<Joueur>(2 ,1);
 	}
 
-	public void saveJoueur(Joueur joueur) throws RemoteException {
+	public void saveJoueur(String username) throws RemoteException {
 		System.out.println("Invocation de la méthode saveJoueur()");
-		System.out.println(joueur);
-		joueurs.addElement(joueur);
+		joueurs.addElement(new Joueur(username));
 		System.out.println(joueurs);
 	}
 	
 
-	public void removeJoueur(Joueur joueur) throws RemoteException {
+	public void removeJoueur(String username) throws RemoteException {
 		System.out.println("Invocation de la méthode removeJoueur()");
-		System.out.println(joueur);
-		System.out.println(joueurs);
-		joueurs.removeElement(joueur);
+		for(Joueur j : joueurs){
+			if(j.getName().equals(username)){
+				joueurs.remove(j);
+				break;
+			}
+		}	
 		System.out.println(joueurs);
 	}
   	
