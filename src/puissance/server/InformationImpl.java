@@ -65,7 +65,14 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 
 	@Override
 	public boolean joueurExistant(String username) throws RemoteException {
-		// TODO Auto-generated method stub
-		return false;
+		System.out.println("Invocation de la méthode joueurExistant()");
+		boolean test = false;
+		for(Joueur j : joueurs){
+			if(j.getName().equals(username)){
+				test = true;
+				break;
+			}
+		}
+		return test;
 	}  
 }
