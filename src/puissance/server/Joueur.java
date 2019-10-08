@@ -1,16 +1,21 @@
 package puissance.server;
 
 import java.io.Serializable;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import puissance.client.JoueurRemote;
 
-public class Joueur implements Serializable {
-	public String name;
+public class Joueur {
+	private String name;
+	private int nbJetons;
+	private SortedSet<Integer> cartes;
 
-    private  static  final  long serialVersionUID =  1350092881346723535L;
-    
+
 	public Joueur(String name) {
 		this.name = name;
+		
 	}
 
 	public String getName() {
@@ -19,6 +24,11 @@ public class Joueur implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public void initJoueur() {
+		nbJetons = 11;
+		cartes = new TreeSet<Integer>();
 	}
 
 	
