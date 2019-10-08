@@ -61,11 +61,5 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 			joueursList[i] = joueurs.elementAt(i).getName();
 		}
 		return joueursList;
-	}
-
-	@Override
-	public boolean joueurExistant(String username) throws RemoteException {
-		// TODO Auto-generated method stub
-		return false;
 	}  
 }
