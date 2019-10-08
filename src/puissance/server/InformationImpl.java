@@ -21,6 +21,7 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 	String line = "---------------------------------------------\n";
 	private Vector<Joueur> joueurs;
 	private List<Integer> cartes;
+	private int cpt;
 
 	private static final long serialVersionUID = 2674880711467464646L;
 	
@@ -28,9 +29,14 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 		super();
 		joueurs = new Vector<Joueur>(2 ,1);
 		cartes = new ArrayList<Integer>();
+		cpt = 0;
 	}
 	
-	public void initJoueur() {
+	public void init() throws RemoteException {
+		cpt++;
+	}
+	
+	public void initJoueurs() {
 		
 		for(int i=3;i<=35;++i) {
 			cartes.add(i);
@@ -66,18 +72,6 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 		System.out.println(joueurs);
 	}
   	
-	@Override
-	public void updateJeu(String name, String nextPost) throws RemoteException {
-		String message =  name + " : " + nextPost + "\n";
-		//sendToAll(message);
-	}
-
-	@Override
-	public void quitterJeu(String name) throws RemoteException {
-		// TODO Auto-generated method stub
-		
-	}
-
 	@Override
 	public String[] getJoueurList() throws RemoteException {
 		System.out.println("Invocation de la méthode getJoueurList()");

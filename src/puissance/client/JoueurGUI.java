@@ -41,8 +41,8 @@ public class JoueurGUI extends JFrame implements ActionListener{
     private static Information info;
 	
 	private static final long serialVersionUID = 1L;	
-	private JPanel conteneur, conteneur1, conteneur2, inputPanel;
-	private JButton boutonStart, boutonJoueur;
+	private JPanel conteneur, conteneur1, conteneur2, inputPanel, conteneurBouton;
+	private JButton boutonConnexion, boutonJoueur, boutonStart;
     private JList<String> list;
     private DefaultListModel<String> listModel;
     protected JFrame frame;
@@ -88,10 +88,14 @@ public class JoueurGUI extends JFrame implements ActionListener{
 		
 		//setLocationRelativeTo(null);
 
-		textArea = new JTextArea("Bienvenue, écrivez votre nom et tapez entrée pour commencer");
+		textArea = new JTextArea("Ecrivez votre nom et cliquez sur Connection");
 		textArea.setLineWrap(true);
 		textArea.setWrapStyleWord(true);
-		boutonStart = new JButton("Start");
+		boutonConnexion = new JButton("Connection");
+		boutonConnexion.addActionListener(this);
+		
+		boutonStart = new JButton("Debut de la partie");
+		boutonStart.setEnabled(false);
 		boutonStart.addActionListener(this);
 		
 		boutonJoueur = new JButton("Afficher Joueur");
@@ -104,7 +108,14 @@ public class JoueurGUI extends JFrame implements ActionListener{
 		conteneur1 = new JPanel();
 		conteneur1.setLayout(new BorderLayout());
 		
-		conteneur1.add(boutonStart, "North");
+
+		conteneurBouton = new JPanel();
+		
+		conteneurBouton.add(boutonConnexion, "West");
+		conteneurBouton.add(boutonStart, "East");
+		
+
+		conteneur1.add(conteneurBouton, "North");
 		conteneur1.add(textArea, "Center");
 		conteneur1.add(boutonJoueur, "South");
 		
@@ -121,7 +132,7 @@ public class JoueurGUI extends JFrame implements ActionListener{
 
 		frame.setAlwaysOnTop(true);
 		frame.setLocation(300, 300);
-	   	frame.setSize(400, 300);
+	   	frame.setSize(500, 500);
 		textArea.requestFocus();
 	
 		frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -165,10 +176,10 @@ public class JoueurGUI extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		//get connected to service
-		if(e.getSource() == boutonStart){
-			System.out.println("boutonStart");
-			try {
+		try {
+			//get connected to service
+			if(e.getSource() == boutonConnexion){
+				System.out.println("boutonStart");
 				if(!info.joueurExistant(textArea.getText())) {
 					name = textArea.getText();			
 					if(name.length() != 0){
@@ -178,8 +189,9 @@ public class JoueurGUI extends JFrame implements ActionListener{
 						
 						info.saveJoueur(name);
 						
-						boutonStart.setEnabled(false);
+						boutonConnexion.setEnabled(false);
 						boutonJoueur.setEnabled(true);
+						boutonStart.setEnabled(true);
 					}
 					else{
 						JOptionPane.showMessageDialog(frame, "Entrez un pseudo pour commencer");
@@ -188,18 +200,23 @@ public class JoueurGUI extends JFrame implements ActionListener{
 				else{
 					JOptionPane.showMessageDialog(frame, "Pseudo déjà utilisé");
 				}
-			} catch (HeadlessException e1) {
-				e1.printStackTrace();
-			} catch (RemoteException e1) {
-				e1.printStackTrace();
+				
 			}
+			
+			if(e.getSource() == boutonJoueur) {
+				System.out.println("boutonJoueur");
+				//todo
+				getJoueurs();
+			}
+			
+			if(e.getSource() == boutonStart) {
+				
+			}
+		} catch (HeadlessException e1) {
+			e1.printStackTrace();
+		} catch (RemoteException e1) {
+			e1.printStackTrace();
 		}
-		if(e.getSource() == boutonJoueur) {
-			System.out.println("boutonJoueur");
-			//todo
-			getJoueurs();
-		}
-		
 	}
 	
 	private void getJoueurs() {
