@@ -1,14 +1,14 @@
 package puissance.server;
 
+import java.io.Serializable;
+
 import puissance.client.JoueurRemote;
 
-public class Joueur {
+public class Joueur implements Serializable {
 	public String name;
-	public JoueurRemote joueur;
 	
-	public Joueur(String name, JoueurRemote joueur) {
+	public Joueur(String name) {
 		this.name = name;
-		this.joueur = joueur;
 	}
 
 	public String getName() {
@@ -19,12 +19,5 @@ public class Joueur {
 		this.name = name;
 	}
 
-	public JoueurRemote getJoueur() {
-		return joueur;
-	}
-
-	public void setJoueur(JoueurRemote joueur) {
-		this.joueur = joueur;
-	}
 	
 }

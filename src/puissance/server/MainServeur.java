@@ -1,3 +1,4 @@
+
 package puissance.server;
 
 
@@ -17,7 +18,7 @@ public class MainServeur {
 	public static void main(String[] args) {
 		try {
 		      LocateRegistry.createRegistry(8080);
-
+		      final long serialVersionUID = 20120731125400L;
 		      Information information = new InformationImpl();
 
 		      Naming.bind("//localhost:8080/TestRMI", information);
