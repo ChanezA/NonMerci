@@ -8,6 +8,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 import puissance.server.Information;
+import puissance.server.Joueur;
 
 
 public class MainClient {
@@ -16,7 +17,7 @@ public class MainClient {
 		try {
 			Information info = (Information) Naming.lookup("//localhost:8080/TestRMI");
 			System.out.println("truc");
-			info.saveJoueur("test");
+			info.saveJoueur(new Joueur("user"));
 			System.out.println("test");
 			while(true) {
 				

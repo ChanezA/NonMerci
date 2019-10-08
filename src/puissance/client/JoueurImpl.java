@@ -17,6 +17,7 @@ public class JoueurImpl extends UnicastRemoteObject implements JoueurRemote{
 	protected Information information;
 	JoueurGUI joueurGUI;
 	
+	
 	protected boolean connectionProblem = false;
 	
 	protected JoueurImpl(JoueurGUI joueurGUI, String userName) throws RemoteException {

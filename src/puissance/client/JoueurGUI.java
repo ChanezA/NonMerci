@@ -30,6 +30,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 
 import puissance.server.Information;
+import puissance.server.Joueur;
 
 public class JoueurGUI extends JFrame implements ActionListener{
 
@@ -46,6 +47,7 @@ public class JoueurGUI extends JFrame implements ActionListener{
     protected JPanel clientPanel, userPanel;
 	protected JTextArea textArea;
 	
+	private Joueur joueur;
     
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -56,7 +58,19 @@ public class JoueurGUI extends JFrame implements ActionListener{
 	public JoueurGUI() {
 		frame = new JFrame();
 		
-		setTitle("Puissance 4 cardgame");
+		frame.addWindowListener(new java.awt.event.WindowAdapter() {
+	        public void windowClosing(java.awt.event.WindowEvent winEvt) {
+
+				try {
+					info.removeJoueur(joueur);
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
+	            System.exit(0);
+	        }
+	    });
+		
+		setTitle("Non Merci");
 	
 		//frame.setResizable(false);
 		
@@ -180,11 +194,13 @@ public class JoueurGUI extends JFrame implements ActionListener{
 		}
 	}
 
-	private void getConnected(String userName) {
+	private void getConnected(String username) {
 		try {		
 
 			info = (Information) Naming.lookup("//localhost:8080/TestRMI");
-			info.saveJoueur(userName);
+			joueur = new Joueur(username);
+			System.out.println("debug " + joueur);
+			info.saveJoueur(joueur);
 		}  catch (MalformedURLException e) {
 		      e.printStackTrace();
 	    } catch (RemoteException e) {

@@ -1,8 +1,10 @@
 package puissance.server;
 
+import java.io.Serializable;
+
 import puissance.client.JoueurRemote;
 
-public class Joueur {
+public class Joueur implements Serializable {
 	public String name;
 	
 	public Joueur(String name) {
