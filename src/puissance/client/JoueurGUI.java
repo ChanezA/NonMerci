@@ -35,7 +35,6 @@ import puissance.server.Joueur;
 
 public class JoueurGUI extends JFrame implements ActionListener{
 
-	private JoueurImpl clientImpl;
 	private String name;
     private JoueurImpl joueurImpl;
     private static Information info;
@@ -51,8 +50,8 @@ public class JoueurGUI extends JFrame implements ActionListener{
 	    
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		JoueurGUI gui = new JoueurGUI();
-		try {
+		new JoueurGUI();
+		/*try {
 			info = (Information) Naming.lookup("//localhost:8080/TestRMI");
 		}  catch (MalformedURLException e) {
 		      e.printStackTrace();
@@ -60,7 +59,7 @@ public class JoueurGUI extends JFrame implements ActionListener{
 	      e.printStackTrace();
 	    } catch (NotBoundException e) {
 	      e.printStackTrace();
-	    }
+	    }*/
 	}
 	
 	public JoueurGUI() {
@@ -68,10 +67,11 @@ public class JoueurGUI extends JFrame implements ActionListener{
 		
 		frame.addWindowListener(new java.awt.event.WindowAdapter() {
 	        public void windowClosing(java.awt.event.WindowEvent winEvt) {
-	        	if(name != null) {
+	        	if(joueurImpl != null) {
 					try {
-						System.out.println("debuger");
-						info.removeJoueur(name);
+						System.out.println("sortie");
+						joueurImpl.information.removeJoueur(name);
+						//info.removeJoueur(name);
 					} catch (RemoteException e) {
 						e.printStackTrace();
 					}		
@@ -180,14 +180,16 @@ public class JoueurGUI extends JFrame implements ActionListener{
 			//get connected to service
 			if(e.getSource() == boutonConnexion){
 				System.out.println("boutonStart");
-				if(!info.joueurExistant(textArea.getText())) {
+				//if(!info.joueurExistant(textArea.getText())) {
 					name = textArea.getText();			
 					if(name.length() != 0){
 						frame.setTitle(name + "'s console ");
 						textArea.setText("");
 						textArea.append("username : " + name + " connecting...\n");		
 						
-						info.saveJoueur(name);
+						joueurImpl = new JoueurImpl(this, name);
+						joueurImpl.start();
+						//info.saveJoueur(name);
 						
 						boutonConnexion.setEnabled(false);
 						boutonJoueur.setEnabled(true);
@@ -196,10 +198,10 @@ public class JoueurGUI extends JFrame implements ActionListener{
 					else{
 						JOptionPane.showMessageDialog(frame, "Entrez un pseudo pour commencer");
 					}
-				}
+				/*}
 				else{
 					JOptionPane.showMessageDialog(frame, "Pseudo déjà utilisé");
-				}
+				}*/
 				
 			}
 			

@@ -11,19 +11,19 @@ public class Joueur {
 	private String name;
 	private int nbJetons;
 	private SortedSet<Integer> cartes;
+	private JoueurRemote joueurRemote;
 
-
-	public Joueur(String name) {
+	public Joueur(String name, JoueurRemote joueurRemote) {
 		this.name = name;
-		
+		this.joueurRemote = joueurRemote;
+	}
+
+	public JoueurRemote getJoueurRemote() {
+		return joueurRemote;
 	}
 
 	public String getName() {
 		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public void initJoueur() {

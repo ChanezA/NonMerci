@@ -1,9 +1,11 @@
 package puissance.server;
 
 import java.net.MalformedURLException;
+import java.rmi.AlreadyBoundException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
 import java.rmi.server.RemoteRef;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -32,6 +34,25 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 		cpt = 0;
 	}
 	
+	public static void main(String[] args) {
+		try {
+		      LocateRegistry.createRegistry(8080);
+		      Information information = new InformationImpl();
+
+		      Naming.bind("rmi://localhost:8080/TestRMI", information);
+		      
+		      System.out.println("Serveur lancé");
+		    } catch (RemoteException e) {
+		      e.printStackTrace();
+		    } catch (MalformedURLException e) {
+		      e.printStackTrace();
+		    } catch (AlreadyBoundException e) {
+				e.printStackTrace();
+			} catch(Exception e){
+				System.out.println("Problèmes Serveur");
+			}	
+	}
+	
 	public void init() throws RemoteException {
 		cpt++;
 	}
@@ -54,25 +75,52 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 		
 	}
 
-	public void saveJoueur(String username) throws RemoteException {
+	public void saveJoueur(String name) throws RemoteException {
 		System.out.println("Invocation de la méthode saveJoueur()");
-		joueurs.addElement(new Joueur(username));
-		System.out.println(joueurs);
+		
+		try {
+			JoueurRemote joueurRemote =  ( JoueurRemote ) Naming.lookup("rmi://localhost:8080/TestRMI"+name);
+		
+			joueurs.addElement(new Joueur(name, joueurRemote));
+			
+			//joueurRemote.messageFromServer("[Server] : Hello " + name + "\n");
+			
+			//sendToAll("[Server] : " + name + " has joined the group.\n");
+			
+			updateUserList();	
+			
+		}  catch (MalformedURLException e) {
+		      e.printStackTrace();
+	    } catch (RemoteException e) {
+	      e.printStackTrace();
+	    } catch (NotBoundException e) {
+	      e.printStackTrace();
+	    }
+		
 	}
 	
-
-	public void removeJoueur(String username) throws RemoteException {
-		System.out.println("Invocation de la méthode removeJoueur()");
+	
+	private void updateUserList() {
+		String[] currentUsers = null;
+		try {
+			currentUsers = getJoueurList();
+		} catch (RemoteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		//String[] currentUsers = getJoueurList();
 		for(Joueur j : joueurs){
-			if(j.getName().equals(username)){
-				joueurs.remove(j);
-				break;
+			try {
+				j.getJoueurRemote().updateJoueurList(currentUsers);
+			} 
+			catch (RemoteException e) {
+				e.printStackTrace();
 			}
 		}	
-		System.out.println(joueurs);
 	}
-  	
-	@Override
+
+	
 	public String[] getJoueurList() throws RemoteException {
 		System.out.println("Invocation de la méthode getJoueurList()");
 		String[] joueursList = new String[joueurs.size()];
@@ -81,6 +129,22 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 		}
 		return joueursList;
 	}
+	
+	
+	public void removeJoueur(String username) throws RemoteException {
+		System.out.println("Invocation de la méthode removeJoueur()");
+		for(Joueur j : joueurs){
+			if(j.getName().equals(username)){
+				joueurs.remove(j);
+				break;
+			}
+		}	
+		
+		updateUserList();
+		
+		System.out.println(joueurs);
+	}
+  	
 
 	@Override
 	public boolean joueurExistant(String username) throws RemoteException {

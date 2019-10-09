@@ -10,6 +10,7 @@ import java.rmi.server.UnicastRemoteObject;
 import javax.swing.JOptionPane;
 
 import puissance.server.Information;
+import puissance.server.InformationImpl;
 
 public class JoueurImpl extends UnicastRemoteObject implements JoueurRemote{
 
@@ -17,23 +18,32 @@ public class JoueurImpl extends UnicastRemoteObject implements JoueurRemote{
 	protected Information information;
 	JoueurGUI joueurGUI;
 	
-	
 	protected boolean connectionProblem = false;
 	
-	protected JoueurImpl(JoueurGUI joueurGUI, String userName) throws RemoteException {
+	protected JoueurImpl(JoueurGUI joueurGUI, String name) throws RemoteException {
 		super();
 		// TODO Auto-generated constructor stub
 		this.joueurGUI = joueurGUI;
-		this.name = userName;
+		this.name = name;
 	}
 
-	@Override
-	public void messageFromServer(String message) throws RemoteException {
-		System.out.println( message );
-		joueurGUI.textArea.append( message );
-		joueurGUI.textArea.setCaretPosition(joueurGUI.textArea.getDocument().getLength());
+	public void start() throws RemoteException {
+		try {
+			Naming.rebind("//localhost:8080/TestRMI"+name, this);
+			information = ( Information ) Naming.lookup("rmi://localhost:8080/TestRMI");
+			
+			information.saveJoueur(name);
+		}  catch (MalformedURLException e) {
+		      e.printStackTrace();
+	    } catch (RemoteException e) {
+	      e.printStackTrace();
+	    } catch (NotBoundException e) {
+	      e.printStackTrace();
+	    }
+		System.out.println("RMI connect");
 		
 	}
+
 
 	@Override
 	public void updateJoueurList(String[] joueurs) throws RemoteException {
