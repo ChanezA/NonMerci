@@ -46,6 +46,7 @@ public class JoueurGUI extends JFrame implements ActionListener{
     private DefaultListModel<String> listModel;
     protected JFrame frame;
     protected JPanel clientPanel, userPanel;
+	protected JTextField textField;
 	protected JTextArea textArea;
 	    
 	public static void main(String[] args) {
@@ -88,9 +89,11 @@ public class JoueurGUI extends JFrame implements ActionListener{
 		
 		//setLocationRelativeTo(null);
 
-		textArea = new JTextArea("Ecrivez votre nom et cliquez sur Connection");
-		textArea.setLineWrap(true);
-		textArea.setWrapStyleWord(true);
+		textArea = new JTextArea("");
+		textField = new JTextField("Entez votre nom");
+		textField.setSize(50, 10);
+		//textField.setLineWrap(true);
+		//textField.setWrapStyleWord(true);
 		boutonConnexion = new JButton("Connection");
 		boutonConnexion.addActionListener(this);
 		
@@ -111,19 +114,18 @@ public class JoueurGUI extends JFrame implements ActionListener{
 
 		conteneurBouton = new JPanel();
 		
+		conteneurBouton.add(textField, "East");
 		conteneurBouton.add(boutonConnexion, "West");
-		conteneurBouton.add(boutonStart, "East");
 		
 
 		conteneur1.add(conteneurBouton, "North");
 		conteneur1.add(textArea, "Center");
-		conteneur1.add(boutonJoueur, "South");
+		//conteneur1.add(boutonJoueur, "South");
 		
 		
 		conteneur2 = new JPanel();
 		conteneur2.setLayout(new BorderLayout());
 		conteneur2.add(getUsersPanel());
-
 		conteneur.add(conteneur1, "Center");
 		conteneur.add(conteneur2, "West");
 		
@@ -132,8 +134,8 @@ public class JoueurGUI extends JFrame implements ActionListener{
 
 		frame.setAlwaysOnTop(true);
 		frame.setLocation(300, 300);
-	   	frame.setSize(500, 500);
-		textArea.requestFocus();
+	   	frame.setSize(400, 500);
+		textField.requestFocus();
 	
 		frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		frame.setVisible(true);
@@ -150,13 +152,13 @@ public class JoueurGUI extends JFrame implements ActionListener{
 		userLabel.setFont(new Font("Meiryo", Font.PLAIN, 16));
 
 		String[] noClientsYet = {"No other users"};
-		setClientPanel(noClientsYet);
+		setUsersPanel(noClientsYet);
 
 
 		return userPanel;	
 	}
 
-    public void setClientPanel(String[] currClients) {  	
+    public void setUsersPanel(String[] currClients) {  	
     	clientPanel = new JPanel(new BorderLayout());
         listModel = new DefaultListModel<String>();
         
@@ -181,11 +183,11 @@ public class JoueurGUI extends JFrame implements ActionListener{
 			if(e.getSource() == boutonConnexion){
 				System.out.println("boutonStart");
 				//if(!info.joueurExistant(textArea.getText())) {
-					name = textArea.getText();			
+					name = textField.getText();			
 					if(name.length() != 0){
 						frame.setTitle(name + "'s console ");
-						textArea.setText("");
-						textArea.append("username : " + name + " connecting...\n");		
+						//textField.setText("");
+						textArea.setText("username : " + name + " connecting...\n");		
 						
 						joueurImpl = new JoueurImpl(this, name);
 						joueurImpl.start();
@@ -225,12 +227,17 @@ public class JoueurGUI extends JFrame implements ActionListener{
 		try {
 			String[] noClientsYet;
 			noClientsYet = info.getJoueurList();
-			setClientPanel(noClientsYet);
+			setUsersPanel(noClientsYet);
 
 			clientPanel.repaint();
 			clientPanel.revalidate();
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void setPlateau(String[] data) {
+		textArea.append("Carte tirée : " + data[0] + ", Jeton pour la carte : " + data[1]);
+		
 	}
 }

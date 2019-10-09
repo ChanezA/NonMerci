@@ -10,5 +10,4 @@ public interface Information extends Remote {
 	public boolean joueurExistant(String username) throws RemoteException;
 	public String[] getJoueurList() throws RemoteException;
 	
-	public void init() throws RemoteException;
 }

@@ -5,4 +5,5 @@ import java.rmi.RemoteException;
 
 public interface JoueurRemote extends Remote {
 	public void updateJoueurList(String[] joueurs) throws RemoteException;
+	public void updatePlateau(String[] data) throws RemoteException;
 }

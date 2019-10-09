@@ -23,15 +23,16 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 	String line = "---------------------------------------------\n";
 	private Vector<Joueur> joueurs;
 	private List<Integer> cartes;
-	private int cpt;
-
+	private boolean partieLancee;
+	private String[] details = {"0", "0"};
+	
 	private static final long serialVersionUID = 2674880711467464646L;
 	
 	public InformationImpl() throws RemoteException {
 		super();
 		joueurs = new Vector<Joueur>(2 ,1);
 		cartes = new ArrayList<Integer>();
-		cpt = 0;
+		partieLancee = false;
 	}
 	
 	public static void main(String[] args) {
@@ -52,12 +53,8 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 				System.out.println("Problèmes Serveur");
 			}	
 	}
-	
-	public void init() throws RemoteException {
-		cpt++;
-	}
-	
-	public void initJoueurs() {
+		
+	public void initPartie() {
 		
 		for(int i=3;i<=35;++i) {
 			cartes.add(i);
@@ -72,31 +69,39 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 			j.initJoueur();
 		}
 		
+		details[0] = Integer.toString(cartes.get(r.nextInt(cartes.size())));
+		cartes.remove(cartes.get(r.nextInt(cartes.size())));
 		
 	}
 
 	public void saveJoueur(String name) throws RemoteException {
 		System.out.println("Invocation de la méthode saveJoueur()");
-		
-		try {
-			JoueurRemote joueurRemote =  ( JoueurRemote ) Naming.lookup("rmi://localhost:8080/TestRMI"+name);
-		
-			joueurs.addElement(new Joueur(name, joueurRemote));
+		if(!partieLancee) {
+			try {
+				JoueurRemote joueurRemote =  ( JoueurRemote ) Naming.lookup("rmi://localhost:8080/TestRMI"+name);
 			
-			//joueurRemote.messageFromServer("[Server] : Hello " + name + "\n");
-			
-			//sendToAll("[Server] : " + name + " has joined the group.\n");
-			
-			updateUserList();	
-			
-		}  catch (MalformedURLException e) {
+				joueurs.addElement(new Joueur(name, joueurRemote));
+				
+				//joueurRemote.messageFromServer("[Server] : Hello " + name + "\n");
+				
+				//sendToAll("[Server] : " + name + " has joined the group.\n");
+				
+				updateUserList();	
+				
+			}  catch (MalformedURLException e) {
+			      e.printStackTrace();
+		    } catch (RemoteException e) {
 		      e.printStackTrace();
-	    } catch (RemoteException e) {
-	      e.printStackTrace();
-	    } catch (NotBoundException e) {
-	      e.printStackTrace();
-	    }
-		
+		    } catch (NotBoundException e) {
+		      e.printStackTrace();
+		    }
+			
+			if(joueurs.size() == 3) {
+				partieLancee = true;
+				initPartie();
+				updatePlateau();
+			}	
+		}
 	}
 	
 	
@@ -120,6 +125,16 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 		}	
 	}
 
+	private void updatePlateau() {
+		for(Joueur j : joueurs){
+			try {
+				j.getJoueurRemote().updatePlateau(details);
+			} 
+			catch (RemoteException e) {
+				e.printStackTrace();
+			}
+		}	
+	}
 	
 	public String[] getJoueurList() throws RemoteException {
 		System.out.println("Invocation de la méthode getJoueurList()");
@@ -157,5 +172,6 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 			}
 		}
 		return test;
-	}  
+	}
+
 }

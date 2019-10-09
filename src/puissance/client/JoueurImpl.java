@@ -48,11 +48,18 @@ public class JoueurImpl extends UnicastRemoteObject implements JoueurRemote{
 	@Override
 	public void updateJoueurList(String[] joueurs) throws RemoteException {
 		joueurGUI.userPanel.remove(joueurGUI.clientPanel);
-		joueurGUI.setClientPanel(joueurs);
+		joueurGUI.setUsersPanel(joueurs);
 		joueurGUI.clientPanel.repaint();
 		joueurGUI.clientPanel.revalidate();
 	}
 	
-	
+
+	@Override
+	public void updatePlateau(String[] data) throws RemoteException {
+		joueurGUI.textArea.setText("");
+		joueurGUI.setPlateau(data);
+		joueurGUI.clientPanel.repaint();
+		joueurGUI.clientPanel.revalidate();
+	}
 
 }
