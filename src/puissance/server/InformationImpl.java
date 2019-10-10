@@ -11,6 +11,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -85,15 +86,43 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 			cartes.remove(cartes.get(rand));
 		} else {
 			//fin partie
-			calculPoint();
+			calculGagnant();
 			System.out.println("FIN");
 		}
 	}
+	
+	private void calculGagnant() {
 
-	private void calculPoint() {
+		Joueur joueurGagnant = null;
+		int min = 9999;
+		int points;
+		for(Joueur j : joueurs){
+			points = calculPoint(j);
+	        if(points < min) {
+	        	joueurGagnant = j;
+	        	min = points;
+	        }
+		}	
+	    updatePlateauFin(joueurGagnant);
+	}
+
+	private int calculPoint(Joueur joueur) {
 		// TODO Auto-generated method stub
-
-		updatePlateauFin();
+	
+	        Iterator iterator = cartes.iterator();
+	        int[] cartes_entier = new int[cartes.size()];
+	        int i =0;
+	        while(iterator.hasNext()) {
+	        	cartes_entier[i]= Integer.parseInt(iterator.next().toString());
+	            i++;
+	        }
+	        int points = cartes_entier[0];
+	        for(int j=1;j<cartes_entier.length;++j) {
+	            if(cartes_entier[j-1]+1 != cartes_entier[j]) {
+	            	points += cartes_entier[j];
+	            }
+	        }
+	        return (points- joueur.getNbJetons());
 	}
 
 	public void saveJoueur(String name) throws RemoteException {
@@ -168,7 +197,7 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 		}	
 	}
 	
-	private void updatePlateauFin() {
+	private void updatePlateauFin(Joueur joueur) {
 		// TODO Auto-generated method stub
 		
 	}
