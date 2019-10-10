@@ -40,14 +40,16 @@ public class JoueurGUI extends JFrame implements ActionListener{
     private static Information info;
 	
 	private static final long serialVersionUID = 1L;	
-	private JPanel conteneur, conteneur1, conteneur2, inputPanel, conteneurBouton;
+	private JPanel conteneur, conteneur1, conteneur2, conteneur3, inputPanel, conteneurBouton;
 	private JButton boutonConnexion, boutonJoueur, boutonStart;
+
     private JList<String> list;
     private DefaultListModel<String> listModel;
     protected JFrame frame;
     protected JPanel clientPanel, userPanel;
 	protected JTextField textField;
 	protected JTextArea textArea;
+	protected JButton boutonPass, boutonAccept;
 	    
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -105,6 +107,14 @@ public class JoueurGUI extends JFrame implements ActionListener{
 		boutonJoueur.setEnabled(false);
 		boutonJoueur.addActionListener(this);
 		
+		boutonAccept = new JButton("Accepter");
+		boutonAccept.setEnabled(false);
+		boutonAccept.addActionListener(this);
+		
+		boutonPass = new JButton("Passer");
+		boutonPass.setEnabled(false);
+		boutonPass.addActionListener(this);
+		
 		conteneur = new JPanel();
 		conteneur.setLayout(new BorderLayout());
 		
@@ -116,16 +126,23 @@ public class JoueurGUI extends JFrame implements ActionListener{
 		
 		conteneurBouton.add(textField, "East");
 		conteneurBouton.add(boutonConnexion, "West");
-		
+
+		conteneur3 = new JPanel();
+		conteneur3.add(boutonAccept, "East");
+		conteneur3.add(boutonPass, "West");
 
 		conteneur1.add(conteneurBouton, "North");
 		conteneur1.add(textArea, "Center");
+		conteneur1.add(conteneur3, "South");
 		//conteneur1.add(boutonJoueur, "South");
+		
+
 		
 		
 		conteneur2 = new JPanel();
 		conteneur2.setLayout(new BorderLayout());
 		conteneur2.add(getUsersPanel());
+		
 		conteneur.add(conteneur1, "Center");
 		conteneur.add(conteneur2, "West");
 		
@@ -213,7 +230,10 @@ public class JoueurGUI extends JFrame implements ActionListener{
 				getJoueurs();
 			}
 			
-			if(e.getSource() == boutonStart) {
+			if(e.getSource() == boutonAccept) {
+				
+			}
+			if(e.getSource() == boutonPass) {
 				
 			}
 		} catch (HeadlessException e1) {
@@ -237,7 +257,7 @@ public class JoueurGUI extends JFrame implements ActionListener{
 	}
 
 	public void setPlateau(String[] data) {
-		textArea.append("Carte tirée : " + data[0] + ", Jeton pour la carte : " + data[1]);
+		textArea.append("Carte tirée : " + data[0] + ", Jeton pour la carte : " + data[1] + "\n");
 		
 	}
 }

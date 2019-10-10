@@ -6,6 +6,7 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.SortedSet;
 
 import javax.swing.JOptionPane;
 
@@ -58,6 +59,39 @@ public class JoueurImpl extends UnicastRemoteObject implements JoueurRemote{
 	public void updatePlateau(String[] data) throws RemoteException {
 		joueurGUI.textArea.setText("");
 		joueurGUI.setPlateau(data);
+		joueurGUI.clientPanel.repaint();
+		joueurGUI.clientPanel.revalidate();
+	}
+
+	@Override
+	public void activerBouton() throws RemoteException {
+		joueurGUI.boutonPass.setEnabled(true);
+		joueurGUI.boutonAccept.setEnabled(true);
+	}
+
+	@Override
+	public void desactiverBouton() throws RemoteException {
+		joueurGUI.boutonPass.setEnabled(false);
+		joueurGUI.boutonAccept.setEnabled(false);
+		
+	}
+
+	@Override
+	public void updateJetonJoueur(int nbJetons) throws RemoteException {
+		joueurGUI.textArea.append("Vos jetons : " + nbJetons +"\n");
+		joueurGUI.clientPanel.repaint();
+		joueurGUI.clientPanel.revalidate();
+		
+	}
+
+	@Override
+	public void updateCartesJoueurs(SortedSet cartes, String name) throws RemoteException {
+		if(cartes.size() != 0) {
+			joueurGUI.textArea.append("Cartes de " + name + " : " + cartes + "\n");
+		} else {
+
+			joueurGUI.textArea.append("Cartes de " + name + " : Pas de cartes\n");
+		}
 		joueurGUI.clientPanel.repaint();
 		joueurGUI.clientPanel.revalidate();
 	}

@@ -24,7 +24,8 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 	private Vector<Joueur> joueurs;
 	private List<Integer> cartes;
 	private boolean partieLancee;
-	private String[] details = {"0", "0"};
+	private String[] details = {"0", "0"}; //carte tirée, jeton pour la carte
+	private int joueurCourant;
 	
 	private static final long serialVersionUID = 2674880711467464646L;
 	
@@ -61,6 +62,7 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 		}
 
 		Random r = new Random();
+		
 		for(int i=0;i<10;++i) {
 			cartes.remove(cartes.get(r.nextInt(cartes.size())));
 		}
@@ -69,9 +71,16 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 			j.initJoueur();
 		}
 		
-		details[0] = Integer.toString(cartes.get(r.nextInt(cartes.size())));
-		cartes.remove(cartes.get(r.nextInt(cartes.size())));
+		joueurCourant = r.nextInt(joueurs.size());
+		choisirCarte();
 		
+	}
+	
+	public void choisirCarte() {
+		Random r = new Random();
+		int rand = r.nextInt(cartes.size());
+		details[0] = Integer.toString(cartes.get(rand));
+		cartes.remove(cartes.get(rand));
 	}
 
 	public void saveJoueur(String name) throws RemoteException {
@@ -110,7 +119,6 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 		try {
 			currentUsers = getJoueurList();
 		} catch (RemoteException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
@@ -129,6 +137,16 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 		for(Joueur j : joueurs){
 			try {
 				j.getJoueurRemote().updatePlateau(details);
+				j.getJoueurRemote().updateJetonJoueur(j.getNbJetons());
+				if(j == joueurs.get(joueurCourant)) {
+					j.getJoueurRemote().activerBouton();
+				} else {
+					j.getJoueurRemote().desactiverBouton();
+				}
+				for(Joueur player : joueurs) {
+					j.getJoueurRemote().updateCartesJoueurs(j.getCartes(), player.getName());
+					
+				}
 			} 
 			catch (RemoteException e) {
 				e.printStackTrace();
@@ -146,27 +164,49 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 	}
 	
 	
-	public void removeJoueur(String username) throws RemoteException {
+	public void removeJoueur(String name) throws RemoteException {
 		System.out.println("Invocation de la méthode removeJoueur()");
 		for(Joueur j : joueurs){
-			if(j.getName().equals(username)){
+			if(j.getName().equals(name)){
 				joueurs.remove(j);
 				break;
 			}
 		}	
-		
 		updateUserList();
-		
-		System.out.println(joueurs);
 	}
   	
+	public void acceptJoueur(String name) throws RemoteException {
+		System.out.println("Invocation de la méthode acceptJoueur()");
+		for(Joueur j : joueurs){
+			if(j.getName().equals(name)){
+				j.setNbJetons(j.getNbJetons() + Integer.parseInt(details[1]));
+				j.addCarte(details[0]);
+				details[1] = "0";
+				choisirCarte();
+				joueurCourant++;
+				break;
+			}
+		}	
+	}
+	
+	public void passJoueur(String name) throws RemoteException {
+		System.out.println("Invocation de la méthode passJoueur()");
+		for(Joueur j : joueurs){
+			if(j.getName().equals(name)){
+				j.setNbJetons(j.getNbJetons()-1);
+				details[1] = details[1] + 1;
+				joueurCourant++;
+				break;
+			}
+		}	
+	}
 
 	@Override
-	public boolean joueurExistant(String username) throws RemoteException {
+	public boolean joueurExistant(String name) throws RemoteException {
 		System.out.println("Invocation de la méthode joueurExistant()");
 		boolean test = false;
 		for(Joueur j : joueurs){
-			if(j.getName().equals(username)){
+			if(j.getName().equals(name)){
 				test = true;
 				break;
 			}
