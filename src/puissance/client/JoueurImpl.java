@@ -96,4 +96,13 @@ public class JoueurImpl extends UnicastRemoteObject implements JoueurRemote{
 		joueurGUI.clientPanel.revalidate();
 	}
 
+	public void acceptJoueur(String name) throws RemoteException {
+		information.acceptJoueur(name);
+		
+	}
+
+	public void passJoueur(String name) throws RemoteException {
+		information.passJoueur(name);
+	}
+
 }

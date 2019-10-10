@@ -52,17 +52,7 @@ public class JoueurGUI extends JFrame implements ActionListener{
 	protected JButton boutonPass, boutonAccept;
 	    
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		new JoueurGUI();
-		/*try {
-			info = (Information) Naming.lookup("//localhost:8080/TestRMI");
-		}  catch (MalformedURLException e) {
-		      e.printStackTrace();
-	    } catch (RemoteException e) {
-	      e.printStackTrace();
-	    } catch (NotBoundException e) {
-	      e.printStackTrace();
-	    }*/
 	}
 	
 	public JoueurGUI() {
@@ -98,15 +88,7 @@ public class JoueurGUI extends JFrame implements ActionListener{
 		//textField.setWrapStyleWord(true);
 		boutonConnexion = new JButton("Connection");
 		boutonConnexion.addActionListener(this);
-		
-		boutonStart = new JButton("Debut de la partie");
-		boutonStart.setEnabled(false);
-		boutonStart.addActionListener(this);
-		
-		boutonJoueur = new JButton("Afficher Joueur");
-		boutonJoueur.setEnabled(false);
-		boutonJoueur.addActionListener(this);
-		
+				
 		boutonAccept = new JButton("Accepter");
 		boutonAccept.setEnabled(false);
 		boutonAccept.addActionListener(this);
@@ -134,10 +116,7 @@ public class JoueurGUI extends JFrame implements ActionListener{
 		conteneur1.add(conteneurBouton, "North");
 		conteneur1.add(textArea, "Center");
 		conteneur1.add(conteneur3, "South");
-		//conteneur1.add(boutonJoueur, "South");
-		
-
-		
+			
 		
 		conteneur2 = new JPanel();
 		conteneur2.setLayout(new BorderLayout());
@@ -208,11 +187,8 @@ public class JoueurGUI extends JFrame implements ActionListener{
 						
 						joueurImpl = new JoueurImpl(this, name);
 						joueurImpl.start();
-						//info.saveJoueur(name);
 						
 						boutonConnexion.setEnabled(false);
-						boutonJoueur.setEnabled(true);
-						boutonStart.setEnabled(true);
 					}
 					else{
 						JOptionPane.showMessageDialog(frame, "Entrez un pseudo pour commencer");
@@ -226,15 +202,15 @@ public class JoueurGUI extends JFrame implements ActionListener{
 			
 			if(e.getSource() == boutonJoueur) {
 				System.out.println("boutonJoueur");
-				//todo
 				getJoueurs();
 			}
 			
 			if(e.getSource() == boutonAccept) {
-				
+				joueurImpl.acceptJoueur(name);
 			}
+			
 			if(e.getSource() == boutonPass) {
-				
+				joueurImpl.passJoueur(name);
 			}
 		} catch (HeadlessException e1) {
 			e1.printStackTrace();

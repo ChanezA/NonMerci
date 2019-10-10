@@ -57,7 +57,8 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 		
 	public void initPartie() {
 		
-		for(int i=3;i<=35;++i) {
+		//12 pour test, remettre a 35
+		for(int i=3;i<=14;++i) {
 			cartes.add(i);
 		}
 
@@ -77,10 +78,22 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 	}
 	
 	public void choisirCarte() {
-		Random r = new Random();
-		int rand = r.nextInt(cartes.size());
-		details[0] = Integer.toString(cartes.get(rand));
-		cartes.remove(cartes.get(rand));
+		if(cartes.size() != 0) {
+			Random r = new Random();
+			int rand = r.nextInt(cartes.size());
+			details[0] = Integer.toString(cartes.get(rand));
+			cartes.remove(cartes.get(rand));
+		} else {
+			//fin partie
+			calculPoint();
+			System.out.println("FIN");
+		}
+	}
+
+	private void calculPoint() {
+		// TODO Auto-generated method stub
+
+		updatePlateauFin();
 	}
 
 	public void saveJoueur(String name) throws RemoteException {
@@ -138,13 +151,14 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 			try {
 				j.getJoueurRemote().updatePlateau(details);
 				j.getJoueurRemote().updateJetonJoueur(j.getNbJetons());
+				System.out.println(joueurCourant);
 				if(j == joueurs.get(joueurCourant)) {
 					j.getJoueurRemote().activerBouton();
 				} else {
 					j.getJoueurRemote().desactiverBouton();
 				}
 				for(Joueur player : joueurs) {
-					j.getJoueurRemote().updateCartesJoueurs(j.getCartes(), player.getName());
+					j.getJoueurRemote().updateCartesJoueurs(player.getCartes(), player.getName());
 					
 				}
 			} 
@@ -152,6 +166,11 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 				e.printStackTrace();
 			}
 		}	
+	}
+	
+	private void updatePlateauFin() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	public String[] getJoueurList() throws RemoteException {
@@ -183,10 +202,11 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 				j.addCarte(details[0]);
 				details[1] = "0";
 				choisirCarte();
-				joueurCourant++;
+				joueurCourant = (joueurCourant + 1) % joueurs.size();
 				break;
 			}
-		}	
+		}
+		updatePlateau();
 	}
 	
 	public void passJoueur(String name) throws RemoteException {
@@ -194,11 +214,12 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 		for(Joueur j : joueurs){
 			if(j.getName().equals(name)){
 				j.setNbJetons(j.getNbJetons()-1);
-				details[1] = details[1] + 1;
-				joueurCourant++;
+				details[1] = Integer.toString(Integer.parseInt(details[1]) + 1);
+				joueurCourant = (joueurCourant + 1) % joueurs.size();
 				break;
 			}
 		}	
+		updatePlateau();
 	}
 
 	@Override
