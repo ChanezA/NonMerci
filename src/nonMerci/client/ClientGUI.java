@@ -30,14 +30,14 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 
-import nonMerci.server.Information;
+import nonMerci.server.IServeur;
 import nonMerci.server.Joueur;
 
-public class JoueurGUI extends JFrame implements ActionListener{
+public class ClientGUI extends JFrame implements ActionListener{
 
 	private String name;
-    private JoueurImpl joueurImpl;
-    private static Information info;
+    private ClientImpl joueurImpl;
+    private static IServeur info;
 	
 	private static final long serialVersionUID = 1L;	
 	private JPanel conteneur, conteneur1, conteneur2, conteneur3, inputPanel, conteneurBouton;
@@ -52,10 +52,10 @@ public class JoueurGUI extends JFrame implements ActionListener{
 	protected JButton boutonPass, boutonAccept;
 	    
 	public static void main(String[] args) {
-		new JoueurGUI();
+		new ClientGUI();
 	}
 	
-	public JoueurGUI() {
+	public ClientGUI() {
 		frame = new JFrame();
 		
 		frame.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -185,7 +185,7 @@ public class JoueurGUI extends JFrame implements ActionListener{
 						//textField.setText("");
 						textArea.setText("username : " + name + " connecting...\n");		
 						
-						joueurImpl = new JoueurImpl(this, name);
+						joueurImpl = new ClientImpl(this, name);
 						joueurImpl.start();
 						
 						boutonConnexion.setEnabled(false);

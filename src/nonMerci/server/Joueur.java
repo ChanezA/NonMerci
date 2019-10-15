@@ -5,21 +5,21 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import nonMerci.client.JoueurRemote;
+import nonMerci.client.IClient;
 
 public class Joueur {
 	private String name;
 	private int nbJetons;
 	private SortedSet cartes;
-	private JoueurRemote joueurRemote;
+	private IClient joueurRemote;
 
-	public Joueur(String name, JoueurRemote joueurRemote) {
+	public Joueur(String name, IClient joueurRemote) {
 		this.name = name;
 		this.joueurRemote = joueurRemote;
 		this.cartes = new TreeSet();
 	}
 
-	public JoueurRemote getJoueurRemote() {
+	public IClient getJoueurRemote() {
 		return joueurRemote;
 	}
 

@@ -17,9 +17,9 @@ import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
 
-import nonMerci.client.JoueurRemote;
+import nonMerci.client.IClient;
 
-public class InformationImpl extends UnicastRemoteObject implements Information {
+public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 
 	String line = "---------------------------------------------\n";
 	private Vector<Joueur> joueurs;
@@ -30,7 +30,7 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 	
 	private static final long serialVersionUID = 2674880711467464646L;
 	
-	public InformationImpl() throws RemoteException {
+	public ServeurImpl() throws RemoteException {
 		super();
 		joueurs = new Vector<Joueur>(2 ,1);
 		cartes = new ArrayList<Integer>();
@@ -40,7 +40,7 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 	public static void main(String[] args) {
 		try {
 		      LocateRegistry.createRegistry(8080);
-		      Information information = new InformationImpl();
+		      IServeur information = new ServeurImpl();
 
 		      Naming.bind("rmi://localhost:8080/TestRMI", information);
 		      
@@ -129,7 +129,7 @@ public class InformationImpl extends UnicastRemoteObject implements Information 
 		System.out.println("Invocation de la méthode saveJoueur()");
 		if(!partieLancee) {
 			try {
-				JoueurRemote joueurRemote =  ( JoueurRemote ) Naming.lookup("rmi://localhost:8080/TestRMI"+name);
+				IClient joueurRemote =  ( IClient ) Naming.lookup("rmi://localhost:8080/TestRMI"+name);
 			
 				joueurs.addElement(new Joueur(name, joueurRemote));
 				

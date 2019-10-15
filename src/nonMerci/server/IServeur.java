@@ -3,7 +3,7 @@ package nonMerci.server;
 import java.rmi.*;
 import java.rmi.server.RemoteRef;
 
-public interface Information extends Remote {
+public interface IServeur extends Remote {
 
 	public void saveJoueur(String username) throws RemoteException;
 	public void removeJoueur(String username) throws RemoteException;

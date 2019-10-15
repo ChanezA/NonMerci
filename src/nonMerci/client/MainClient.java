@@ -7,7 +7,7 @@ import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-import nonMerci.server.Information;
+import nonMerci.server.IServeur;
 import nonMerci.server.Joueur;
 
 
@@ -15,7 +15,7 @@ public class MainClient {
 	public static void main(String[] argv) {
 
 		try {
-			Information info = (Information) Naming.lookup("//localhost:8080/TestRMI");
+			IServeur info = (IServeur) Naming.lookup("//localhost:8080/TestRMI");
 			info.saveJoueur("user");
 			System.out.println("test");
 			while(true) {

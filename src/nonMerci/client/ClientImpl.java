@@ -10,18 +10,18 @@ import java.util.SortedSet;
 
 import javax.swing.JOptionPane;
 
-import nonMerci.server.Information;
-import nonMerci.server.InformationImpl;
+import nonMerci.server.IServeur;
+import nonMerci.server.ServeurImpl;
 
-public class JoueurImpl extends UnicastRemoteObject implements JoueurRemote{
+public class ClientImpl extends UnicastRemoteObject implements IClient{
 
 	private String name;
-	protected Information information;
-	JoueurGUI joueurGUI;
+	protected IServeur information;
+	ClientGUI joueurGUI;
 	
 	protected boolean connectionProblem = false;
 	
-	protected JoueurImpl(JoueurGUI joueurGUI, String name) throws RemoteException {
+	protected ClientImpl(ClientGUI joueurGUI, String name) throws RemoteException {
 		super();
 		// TODO Auto-generated constructor stub
 		this.joueurGUI = joueurGUI;
@@ -31,7 +31,7 @@ public class JoueurImpl extends UnicastRemoteObject implements JoueurRemote{
 	public void start() throws RemoteException {
 		try {
 			Naming.rebind("//localhost:8080/TestRMI"+name, this);
-			information = ( Information ) Naming.lookup("rmi://localhost:8080/TestRMI");
+			information = ( IServeur ) Naming.lookup("rmi://localhost:8080/TestRMI");
 			
 			information.saveJoueur(name);
 		}  catch (MalformedURLException e) {

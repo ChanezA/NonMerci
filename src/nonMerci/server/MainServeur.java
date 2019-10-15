@@ -19,7 +19,7 @@ public class MainServeur {
 		try {
 		      LocateRegistry.createRegistry(8080);
 		      final long serialVersionUID = 20120731125400L;
-		      Information information = new InformationImpl();
+		      IServeur information = new ServeurImpl();
 
 		      Naming.bind("//localhost:8080/TestRMI", information);
 		      
