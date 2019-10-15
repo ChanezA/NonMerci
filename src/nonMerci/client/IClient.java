@@ -11,4 +11,6 @@ public interface IClient extends Remote {
 	public void desactiverBouton() throws RemoteException;
 	public void updateJetonJoueur(int nbJetons) throws RemoteException;
 	public void updateCartesJoueurs(SortedSet cartes, String string) throws RemoteException;
+	
+	public String getName() throws RemoteException;
 }

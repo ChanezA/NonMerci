@@ -61,13 +61,13 @@ public class ClientGUI extends JFrame implements ActionListener{
 		frame.addWindowListener(new java.awt.event.WindowAdapter() {
 	        public void windowClosing(java.awt.event.WindowEvent winEvt) {
 	        	if(joueurImpl != null) {
-					try {
+					/*try {
 						System.out.println("sortie");
 						joueurImpl.information.removeJoueur(name);
 						//info.removeJoueur(name);
 					} catch (RemoteException e) {
 						e.printStackTrace();
-					}		
+					}		*/
 	        	}
 	            System.exit(0);
 	        }
@@ -220,7 +220,7 @@ public class ClientGUI extends JFrame implements ActionListener{
 	}
 	
 	private void getJoueurs() {
-		try {
+		/*try {
 			String[] noClientsYet;
 			noClientsYet = info.getJoueurList();
 			setUsersPanel(noClientsYet);
@@ -229,7 +229,7 @@ public class ClientGUI extends JFrame implements ActionListener{
 			clientPanel.revalidate();
 		} catch (RemoteException e) {
 			e.printStackTrace();
-		}
+		}*/
 	}
 
 	public void setPlateau(String[] data) {

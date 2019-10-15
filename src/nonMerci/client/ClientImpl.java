@@ -30,10 +30,11 @@ public class ClientImpl extends UnicastRemoteObject implements IClient{
 
 	public void start() throws RemoteException {
 		try {
-			Naming.rebind("//localhost:8080/TestRMI"+name, this);
+			//IClient joueurRemote =  ( IClient ) Naming.lookup("rmi://localhost:8080/TestRMI");
+			//Naming.rebind("//localhost:8080/TestRMI"+name, this);
 			information = ( IServeur ) Naming.lookup("rmi://localhost:8080/TestRMI");
 			
-			information.saveJoueur(name);
+			information.saveJoueur(this);
 		}  catch (MalformedURLException e) {
 		      e.printStackTrace();
 	    } catch (RemoteException e) {
@@ -97,12 +98,17 @@ public class ClientImpl extends UnicastRemoteObject implements IClient{
 	}
 
 	public void acceptJoueur(String name) throws RemoteException {
-		information.acceptJoueur(name);
+		//information.acceptJoueur(name);
 		
 	}
 
 	public void passJoueur(String name) throws RemoteException {
-		information.passJoueur(name);
+		//information.passJoueur(name);
+	}
+
+	@Override
+	public String getName() throws RemoteException {
+		return name;
 	}
 
 }
