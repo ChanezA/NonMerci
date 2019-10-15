@@ -1,11 +1,11 @@
-package puissance.server;
+package nonMerci.server;
 
 import java.io.Serializable;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import puissance.client.JoueurRemote;
+import nonMerci.client.JoueurRemote;
 
 public class Joueur {
 	private String name;

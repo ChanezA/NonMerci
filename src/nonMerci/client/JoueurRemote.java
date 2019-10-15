@@ -1,4 +1,4 @@
-package puissance.client;
+package nonMerci.client;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

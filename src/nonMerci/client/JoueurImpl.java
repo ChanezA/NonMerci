@@ -1,4 +1,4 @@
-package puissance.client;
+package nonMerci.client;
 
 import java.net.MalformedURLException;
 import java.rmi.ConnectException;
@@ -10,8 +10,8 @@ import java.util.SortedSet;
 
 import javax.swing.JOptionPane;
 
-import puissance.server.Information;
-import puissance.server.InformationImpl;
+import nonMerci.server.Information;
+import nonMerci.server.InformationImpl;
 
 public class JoueurImpl extends UnicastRemoteObject implements JoueurRemote{
 

@@ -1,5 +1,5 @@
 
-package puissance.server;
+package nonMerci.server;
 
 
 import java.net.InetAddress;

@@ -1,4 +1,4 @@
-package puissance.server;
+package nonMerci.server;
 
 import java.rmi.*;
 import java.rmi.server.RemoteRef;

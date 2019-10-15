@@ -1,4 +1,4 @@
-package puissance.client;
+package nonMerci.client;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -30,8 +30,8 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 
-import puissance.server.Information;
-import puissance.server.Joueur;
+import nonMerci.server.Information;
+import nonMerci.server.Joueur;
 
 public class JoueurGUI extends JFrame implements ActionListener{
 

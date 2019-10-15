@@ -1,4 +1,4 @@
-package puissance.server;
+package nonMerci.server;
 
 import java.net.MalformedURLException;
 import java.rmi.AlreadyBoundException;
@@ -17,7 +17,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.Vector;
 
-import puissance.client.JoueurRemote;
+import nonMerci.client.JoueurRemote;
 
 public class InformationImpl extends UnicastRemoteObject implements Information {
 

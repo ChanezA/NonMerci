@@ -1,4 +1,4 @@
-package puissance.client;
+package nonMerci.client;
 
 import java.net.InetAddress;
 import java.net.MalformedURLException;
@@ -7,8 +7,8 @@ import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-import puissance.server.Information;
-import puissance.server.Joueur;
+import nonMerci.server.Information;
+import nonMerci.server.Joueur;
 
 
 public class MainClient {
