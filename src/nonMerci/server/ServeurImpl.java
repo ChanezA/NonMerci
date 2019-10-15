@@ -59,7 +59,7 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 	public void initPartie() {
 		
 		//12 pour test, remettre a 35
-		for(int i=3;i<=14;++i) {
+		for(int i=3;i<=35;++i) {
 			cartes.add(i);
 		}
 
