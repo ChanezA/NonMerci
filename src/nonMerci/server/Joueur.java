@@ -1,6 +1,7 @@
 package nonMerci.server;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -8,24 +9,19 @@ import java.util.TreeSet;
 import nonMerci.client.IClient;
 
 public class Joueur {
-	private String name;
 	private int nbJetons;
 	private SortedSet cartes;
-	private IClient joueurRemote;
+	private IClient client;
 
-	public Joueur(String name, IClient joueurRemote) {
-		this.name = name;
-		this.joueurRemote = joueurRemote;
+	public Joueur(IClient client) {
+		this.client = client;
 		this.cartes = new TreeSet();
 	}
 
-	public IClient getJoueurRemote() {
-		return joueurRemote;
+	public IClient getClient() {
+		return client;
 	}
 
-	public String getName() {
-		return name;
-	}
 
 	public int getNbJetons() {
 		return nbJetons;
@@ -48,5 +44,20 @@ public class Joueur {
 		return cartes;
 	}
 
-	
+	public int calculPoint() {
+	    Iterator iterator = cartes.iterator();
+	    int[] cartes_entier = new int[cartes.size()];
+	    int i =0;
+	    while(iterator.hasNext()) {
+	    	cartes_entier[i]= Integer.parseInt(iterator.next().toString());
+	        i++;
+	    }
+	    int points = cartes_entier[0];
+	    for(int j=1;j<cartes_entier.length;++j) {
+	        if(cartes_entier[j-1]+1 != cartes_entier[j]) {
+	        	points += cartes_entier[j];
+	        }
+	    }
+	    return (points- nbJetons);
+	}
 }

@@ -1,22 +1,19 @@
 package nonMerci.client;
 
 import java.net.MalformedURLException;
-import java.rmi.ConnectException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.SortedSet;
 
-import javax.swing.JOptionPane;
-
 import nonMerci.server.IServeur;
-import nonMerci.server.ServeurImpl;
+import nonMerci.server.Joueur;
 
 public class ClientImpl extends UnicastRemoteObject implements IClient{
 
 	private String name;
-	protected IServeur information;
+	protected IServeur serveur;
 	ClientGUI joueurGUI;
 	
 	protected boolean connectionProblem = false;
@@ -28,14 +25,14 @@ public class ClientImpl extends UnicastRemoteObject implements IClient{
 		this.name = name;
 	}
 
-	public void start() throws RemoteException {
+	public void start() {
 		try {
 			//IClient joueurRemote =  ( IClient ) Naming.lookup("rmi://localhost:8080/TestRMI");
 			//Naming.rebind("//localhost:8080/TestRMI"+name, this);
-			information = ( IServeur ) Naming.lookup("rmi://localhost:8080/TestRMI");
+			serveur = ( IServeur ) Naming.lookup("rmi://localhost:8080/TestRMI");
 			
-			information.saveJoueur(this);
-		}  catch (MalformedURLException e) {
+			serveur.saveJoueur(this);
+		} catch (MalformedURLException e) {
 		      e.printStackTrace();
 	    } catch (RemoteException e) {
 	      e.printStackTrace();
@@ -46,6 +43,30 @@ public class ClientImpl extends UnicastRemoteObject implements IClient{
 		
 	}
 
+	public void quitter() {
+		try {
+			serveur.removeJoueur(this);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	public void acceptJoueur() {
+		try {
+			serveur.acceptJoueur(this);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}	
+	}
+
+	public void passJoueur() {
+		try {
+			serveur.passJoueur(this);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+	}
 
 	@Override
 	public void updateJoueurList(String[] joueurs) throws RemoteException {
@@ -97,18 +118,19 @@ public class ClientImpl extends UnicastRemoteObject implements IClient{
 		joueurGUI.clientPanel.revalidate();
 	}
 
-	public void acceptJoueur(String name) throws RemoteException {
-		//information.acceptJoueur(name);
-		
-	}
-
-	public void passJoueur(String name) throws RemoteException {
-		//information.passJoueur(name);
-	}
-
 	@Override
 	public String getName() throws RemoteException {
 		return name;
+	}
+
+	@Override
+	public void updatePlateauFin(IClient client) throws RemoteException {
+		
+		joueurGUI.textArea.setText("Le gagnant est " + client.getName());
+		
+		joueurGUI.clientPanel.repaint();
+		joueurGUI.clientPanel.revalidate();
+		
 	}
 
 }
