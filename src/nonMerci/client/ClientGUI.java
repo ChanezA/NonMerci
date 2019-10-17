@@ -37,11 +37,10 @@ public class ClientGUI extends JFrame implements ActionListener{
 
 	private String name;
     private ClientImpl joueurImpl;
-    private static IServeur info;
 	
 	private static final long serialVersionUID = 1L;	
-	private JPanel conteneur, conteneur1, conteneur2, conteneur3, inputPanel, conteneurBouton;
-	private JButton boutonConnexion, boutonJoueur, boutonStart;
+	private JPanel conteneur, conteneur1, conteneur2, conteneur3, conteneurBouton;
+	private JButton boutonConnexion, boutonJoueur;
 
     private JList<String> list;
     private DefaultListModel<String> listModel;
@@ -61,13 +60,12 @@ public class ClientGUI extends JFrame implements ActionListener{
 		frame.addWindowListener(new java.awt.event.WindowAdapter() {
 	        public void windowClosing(java.awt.event.WindowEvent winEvt) {
 	        	if(joueurImpl != null) {
-					try {
-						System.out.println("sortie");
-						joueurImpl.information.removeJoueur(name);
-						//info.removeJoueur(name);
-					} catch (RemoteException e) {
-						e.printStackTrace();
-					}		
+					
+					System.out.println("sortie");
+					joueurImpl.quitter();
+					
+					//info.removeJoueur(name);
+							
 	        	}
 	            System.exit(0);
 	        }
@@ -206,11 +204,11 @@ public class ClientGUI extends JFrame implements ActionListener{
 			}
 			
 			if(e.getSource() == boutonAccept) {
-				joueurImpl.acceptJoueur(name);
+				joueurImpl.acceptJoueur();
 			}
 			
 			if(e.getSource() == boutonPass) {
-				joueurImpl.passJoueur(name);
+				joueurImpl.passJoueur();
 			}
 		} catch (HeadlessException e1) {
 			e1.printStackTrace();
@@ -220,7 +218,7 @@ public class ClientGUI extends JFrame implements ActionListener{
 	}
 	
 	private void getJoueurs() {
-		try {
+		/*try {
 			String[] noClientsYet;
 			noClientsYet = info.getJoueurList();
 			setUsersPanel(noClientsYet);
@@ -229,7 +227,7 @@ public class ClientGUI extends JFrame implements ActionListener{
 			clientPanel.revalidate();
 		} catch (RemoteException e) {
 			e.printStackTrace();
-		}
+		}*/
 	}
 
 	public void setPlateau(String[] data) {

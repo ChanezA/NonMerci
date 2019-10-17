@@ -3,12 +3,18 @@ package nonMerci.server;
 import java.net.MalformedURLException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
+import java.rmi.server.RemoteRef;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.Vector;
 
 import nonMerci.client.IClient;
@@ -53,7 +59,11 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 	public void initPartie() {
 		
 		//12 pour test, remettre a 35
+<<<<<<< HEAD
 		for(int i=3;i<=35;++i) {
+=======
+		for(int i=3;i<=16;++i) {
+>>>>>>> feat/test
 			cartes.add(i);
 		}
 
@@ -106,8 +116,22 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 	public void saveJoueur(IClient joueur) throws RemoteException {
 		System.out.println("Invocation de la méthode saveJoueur()");
 		if(!partieLancee) {
-			joueurs.addElement(new Joueur(joueur));
-			updateUserList();	
+			/*try {*/
+				/*IClient joueurRemote =  ( IClient ) Naming.lookup("rmi://localhost:8080/TestRMI");*/
+			
+				
+				joueurs.addElement(new Joueur(joueur));
+				
+				updateUserList();	
+				
+			/*}  catch (MalformedURLException e) {
+			      e.printStackTrace();
+		    } catch (RemoteException e) {
+		      e.printStackTrace();
+		    } catch (NotBoundException e) {
+		      e.printStackTrace();
+		    }*/
+			
 			if(joueurs.size() == 3) {
 				partieLancee = true;
 				initPartie();
