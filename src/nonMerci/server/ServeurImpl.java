@@ -101,7 +101,7 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 		}	
 	    updatePlateauFin(joueurGagnant);
 	}
-
+/*
 	public void saveJoueur(IClient joueur) throws RemoteException {
 		System.out.println("Invocation de la mÃ©thode saveJoueur()");
 		if(!partieLancee) {
@@ -114,7 +114,7 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 			}	
 		}
 	}
-	
+*/	
 	private void updateUserList() {
 		String[] currentUsers = null;
 		try {
@@ -224,18 +224,37 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 		}	
 		updatePlateau();
 	}
-/*
+
 	@Override
 	public boolean joueurExistant(String name) throws RemoteException {
-		System.out.println("Invocation de la mÃ©thode joueurExistant()");
+		System.out.println("Invocation de la méthode joueurExistant()");
 		boolean test = false;
 		for(Joueur j : joueurs){
-			if(j.getName().equals(name)){
+			if(j.getClient().getName().equals(name)){
 				test = true;
 				break;
 			}
 		}
 		return test;
 	}
-*/
+	
+	public void saveJoueur(IClient joueur) throws RemoteException {
+		System.out.println("Invocation de la méthode saveJoueur()");
+		if(!partieLancee) {
+			if(!joueurExistant(joueur.getName())){
+				joueurs.addElement(new Joueur(joueur));
+				updateUserList();	
+				if(joueurs.size() == 3) {
+					partieLancee = true;
+					initPartie();
+					updatePlateau();
+				}
+			} else {
+				// TODO : pour l'instant si on a un même nom qu'un autre joueur, on se connecte pour
+				// un jeu mais pas sur la même partie que le joueur qui porte le même nom
+			}
+		}
+	}
+	
+
 }
