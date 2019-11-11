@@ -2,6 +2,7 @@ package nonMerci.client;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.Map;
 import java.util.SortedSet;
 
 public interface IClient extends Remote {
@@ -13,5 +14,5 @@ public interface IClient extends Remote {
 	public void updateCartesJoueurs(SortedSet cartes, String string) throws RemoteException;
 	
 	public String getName() throws RemoteException;
-	public void updatePlateauFin(IClient client) throws RemoteException;
+	public void updatePlateauFin(Map<IClient, Integer>lesjoueurs,IClient client) throws RemoteException;
 }

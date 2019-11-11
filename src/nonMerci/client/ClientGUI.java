@@ -3,6 +3,7 @@ package nonMerci.client;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
@@ -39,7 +40,7 @@ public class ClientGUI extends JFrame implements ActionListener{
     private ClientImpl joueurImpl;
 	
 	private static final long serialVersionUID = 1L;	
-	private JPanel conteneur, conteneur1, conteneur2, conteneur3, conteneurBouton;
+	public JPanel conteneur, conteneur1, conteneur2, conteneur3,jeux,conteneurBouton,affichage;
 	private JButton boutonConnexion, boutonJoueur;
 
     private JList<String> list;
@@ -47,7 +48,11 @@ public class ClientGUI extends JFrame implements ActionListener{
     protected JFrame frame;
     protected JPanel clientPanel, userPanel;
 	protected JTextField textField;
-	protected JTextArea textArea;
+	
+	//protected JTextArea textArea;
+	JLabel label; 
+	
+	
 	protected JButton boutonPass, boutonAccept;
 	    
 	public static void main(String[] args) {
@@ -78,8 +83,9 @@ public class ClientGUI extends JFrame implements ActionListener{
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		//setLocationRelativeTo(null);
-
-		textArea = new JTextArea("");
+		label =new JLabel("");
+		//label3 = new JLabel("");
+		//textArea = new JTextArea("");
 		textField = new JTextField("Entez votre nom");
 		textField.setSize(50, 10);
 		//textField.setLineWrap(true);
@@ -101,7 +107,11 @@ public class ClientGUI extends JFrame implements ActionListener{
 		conteneur1 = new JPanel();
 		conteneur1.setLayout(new BorderLayout());
 		
-
+		jeux = new JPanel();
+		affichage = new JPanel();
+		
+		
+		
 		conteneurBouton = new JPanel();
 		
 		conteneurBouton.add(textField, "East");
@@ -112,7 +122,14 @@ public class ClientGUI extends JFrame implements ActionListener{
 		conteneur3.add(boutonPass, "West");
 
 		conteneur1.add(conteneurBouton, "North");
-		conteneur1.add(textArea, "Center");
+		label.setBounds(0, 0, 200, 50);
+		//conteneur1.add(label);
+		jeux.add(label,"Center");
+		//conteneur1.add(jeux,"Center");
+		//conteneur1.add(affichage);
+		jeux.add(affichage);
+		conteneur1.add(jeux,"Center");
+		//conteneur1.add(label3);
 		conteneur1.add(conteneur3, "South");
 			
 		
@@ -123,9 +140,14 @@ public class ClientGUI extends JFrame implements ActionListener{
 		conteneur.add(conteneur1, "Center");
 		conteneur.add(conteneur2, "West");
 		
+		affichage.setLayout(new FlowLayout());
+		//jeux.setLayout(new FlowLayout());
+		//conteneur1.setLayout(new FlowLayout());
+
+		
 		frame.add(conteneur);
 		frame.pack();
-
+		
 		frame.setAlwaysOnTop(true);
 		frame.setLocation(300, 300);
 	   	frame.setSize(400, 500);
@@ -181,7 +203,14 @@ public class ClientGUI extends JFrame implements ActionListener{
 					if(name.length() != 0){
 						frame.setTitle(name + "'s console ");
 						//textField.setText("");
-						textArea.setText("username : " + name + " connecting...\n");		
+						
+						
+						
+						//textArea.setText("username : " + name + " connecting...\n");		
+						//conteneur1.add(new JLabel(name + " connecting...\n"));
+						label.setText(name + " connecting...\n");
+						
+						
 						
 						joueurImpl = new ClientImpl(this, name);
 						joueurImpl.start();
@@ -204,6 +233,9 @@ public class ClientGUI extends JFrame implements ActionListener{
 			}
 			
 			if(e.getSource() == boutonAccept) {
+				affichage.removeAll();
+				clientPanel.repaint();
+				clientPanel.revalidate();
 				joueurImpl.acceptJoueur();
 			}
 			
@@ -231,7 +263,9 @@ public class ClientGUI extends JFrame implements ActionListener{
 	}
 
 	public void setPlateau(String[] data) {
-		textArea.append("Carte tirée : " + data[0] + ", Jeton pour la carte : " + data[1] + "\n");
+		  
+		label.setText("Carte tirée : " + data[0] + ", Jeton pour la carte : " + data[1] + "\n");
+		//textArea.append("Carte tirée : " + data[0] + ", Jeton pour la carte : " + data[1] + "\n");
 		
 	}
 }

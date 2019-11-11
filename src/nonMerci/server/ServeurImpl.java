@@ -7,7 +7,9 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Vector;
 
@@ -51,7 +53,7 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 	}
 		
 	public void initPartie() {
-		// Mettre à 12 pour test, remettre a 35
+		// Mettre ï¿½ 12 pour test, remettre a 35
 		for(int i=3;i<=35;++i) {
 			cartes.add(i);
 		}
@@ -87,7 +89,10 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 	}
 	
 	private void calculGagnant() {
-
+		Map<IClient, Integer> lesjoueurs = new HashMap<>();
+		for(Joueur j : joueurs){
+			lesjoueurs.put(j.getClient(), j.calculPoint()) ;
+		}			
 		Joueur joueurGagnant = null;
 		int min = Integer.MAX_VALUE;
 		int points;
@@ -99,7 +104,7 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 	        	min = points;
 	        }
 		}	
-	    updatePlateauFin(joueurGagnant);
+		updatePlateauFin(lesjoueurs,joueurGagnant);
 	}
 /*
 	public void saveJoueur(IClient joueur) throws RemoteException {
@@ -155,13 +160,13 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 		}	
 	}
 	
-	private void updatePlateauFin(Joueur joueur) {
+	private void updatePlateauFin(Map<IClient, Integer>lesjoueurs, Joueur joueur) {
 		// TODO Auto-generated method stub
 		System.out.println("Plateau Fin");
 
 		for(Joueur j : joueurs){
 			try {
-				j.getClient().updatePlateauFin(joueur.getClient());
+				j.getClient().updatePlateauFin(lesjoueurs,joueur.getClient());
 				j.getClient().desactiverBouton();
 			} 
 			catch (RemoteException e) {
@@ -181,7 +186,7 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 	
 	
 	public void removeJoueur(IClient joueur) throws RemoteException {
-		System.out.println("Invocation de la méthode removeJoueur()");
+		System.out.println("Invocation de la mï¿½thode removeJoueur()");
 		for(Joueur j : joueurs){
 			if(j.getClient().equals(joueur)){
 				joueurs.remove(j);
@@ -192,7 +197,7 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 	}
   	
 	public void acceptJoueur(IClient joueur) throws RemoteException {
-		System.out.println("Invocation de la méthode acceptJoueur()");
+		System.out.println("Invocation de la mï¿½thode acceptJoueur()");
 		for(Joueur j : joueurs){
 			if(j.getClient().equals(joueur)){
 				j.setNbJetons(j.getNbJetons() + Integer.parseInt(details[1]));
@@ -209,7 +214,7 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 	}
 	
 	public void passJoueur(IClient joueur) throws RemoteException {
-		System.out.println("Invocation de la méthode passJoueur()");
+		System.out.println("Invocation de la mï¿½thode passJoueur()");
 		for(Joueur j : joueurs){
 			if(j.getClient().equals(joueur)){
 				if(j.getNbJetons()==0) {
@@ -227,7 +232,7 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 
 	@Override
 	public boolean joueurExistant(String name) throws RemoteException {
-		System.out.println("Invocation de la méthode joueurExistant()");
+		System.out.println("Invocation de la mï¿½thode joueurExistant()");
 		boolean test = false;
 		for(Joueur j : joueurs){
 			if(j.getClient().getName().equals(name)){
@@ -239,7 +244,7 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 	}
 	
 	public void saveJoueur(IClient joueur) throws RemoteException {
-		System.out.println("Invocation de la méthode saveJoueur()");
+		System.out.println("Invocation de la mï¿½thode saveJoueur()");
 		if(!partieLancee) {
 			if(!joueurExistant(joueur.getName())){
 				joueurs.addElement(new Joueur(joueur));
@@ -250,8 +255,8 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 					updatePlateau();
 				}
 			} else {
-				// TODO : pour l'instant si on a un même nom qu'un autre joueur, on se connecte pour
-				// un jeu mais pas sur la même partie que le joueur qui porte le même nom
+				// TODO : pour l'instant si on a un mï¿½me nom qu'un autre joueur, on se connecte pour
+				// un jeu mais pas sur la mï¿½me partie que le joueur qui porte le mï¿½me nom
 			}
 		}
 	}

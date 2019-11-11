@@ -5,7 +5,11 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.SortedSet;
+
+import javax.swing.JLabel;
 
 import nonMerci.server.IServeur;
 
@@ -79,7 +83,7 @@ public class ClientImpl extends UnicastRemoteObject implements IClient{
 
 	@Override
 	public void updatePlateau(String[] data) throws RemoteException {
-		joueurGUI.textArea.setText("");
+		//joueurGUI.textArea.setText("");
 		joueurGUI.setPlateau(data);
 		joueurGUI.clientPanel.repaint();
 		joueurGUI.clientPanel.revalidate();
@@ -100,7 +104,14 @@ public class ClientImpl extends UnicastRemoteObject implements IClient{
 
 	@Override
 	public void updateJetonJoueur(int nbJetons) throws RemoteException {
-		joueurGUI.textArea.append("Vos jetons : " + nbJetons +"\n");
+		joueurGUI.affichage.removeAll();
+		
+		JLabel label2 = new JLabel();
+	    label2.setBounds(0, 40, 200, 50);
+	    label2.setText("Vos jetons : " + nbJetons +"\n");
+		//joueurGUI.conteneur1.add(label2);
+	    joueurGUI.affichage.add(label2);
+		//joueurGUI.textArea.append("Vos jetons : " + nbJetons +"\n");
 		joueurGUI.clientPanel.repaint();
 		joueurGUI.clientPanel.revalidate();
 		
@@ -108,11 +119,24 @@ public class ClientImpl extends UnicastRemoteObject implements IClient{
 
 	@Override
 	public void updateCartesJoueurs(SortedSet cartes, String name) throws RemoteException {
+		
+		
+		JLabel label1 = new JLabel();
+	    label1.setBounds(0, 20, 300, 200);
+		
 		if(cartes.size() != 0) {
-			joueurGUI.textArea.append("Cartes de " + name + " : " + cartes + "\n");
+			//joueurGUI.label3.setText("Cartes de " + name + " : " + cartes + "\n");
+			//joueurGUI.textArea.append("Cartes de " + name + " : " + cartes + "\n");
+			label1.setText("Cartes de " + name + " : " + cartes + "\n");
+			//joueurGUI.conteneur1.add(label1);
+			joueurGUI.affichage.add(label1);
 		} else {
+			//joueurGUI.label3.setText("Cartes de " + name + " : Pas de cartes\n");
 
-			joueurGUI.textArea.append("Cartes de " + name + " : Pas de cartes\n");
+			label1.setText("Cartes de " + name + " : Pas de cartes\n"+"\n");
+			//joueurGUI.conteneur1.add(label1);
+			joueurGUI.affichage.add(label1);
+			//joueurGUI.label.setText("Cartes de " + name + " : Pas de cartes\n");
 		}
 		joueurGUI.clientPanel.repaint();
 		joueurGUI.clientPanel.revalidate();
@@ -124,9 +148,24 @@ public class ClientImpl extends UnicastRemoteObject implements IClient{
 	}
 
 	@Override
-	public void updatePlateauFin(IClient client) throws RemoteException {
-		
-		joueurGUI.textArea.setText("Le gagnant est " + client.getName());
+	public void updatePlateauFin(Map<IClient, Integer>lesjoueurs,IClient client) throws RemoteException {
+		//joueurGUI.affichage.removeAll();
+		joueurGUI.jeux.removeAll();
+		//joueurGUI.textArea.setText("Le gagnant est " + client.getName());
+		joueurGUI.jeux.add(new JLabel("Le gagnant est " + client.getName()+"\n"));
+		for(Entry<IClient, Integer> entry : lesjoueurs.entrySet()) {
+			IClient cle = entry.getKey();
+			Integer valeur = entry.getValue();
+		    // traitements
+			/*if(cle.getName().equals(client.getName())) {
+				//
+			}*/
+			System.out.println(cle.getName()+" a eu "+ valeur+ "points");
+			joueurGUI.jeux.add(new JLabel(cle.getName()+" a eu "+ valeur+ "points"+"\n"));
+			
+			//System.out.println(cle.getName()+" a eu "+ valeur+ "points");
+
+		}
 		
 		joueurGUI.clientPanel.repaint();
 		joueurGUI.clientPanel.revalidate();
