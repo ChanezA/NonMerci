@@ -43,19 +43,24 @@ public class Joueur {
 	}
 
 	public int calculPoint() {
-	    Iterator iterator = cartes.iterator();
-	    int[] cartes_entier = new int[cartes.size()];
-	    int i =0;
-	    while(iterator.hasNext()) {
-	    	cartes_entier[i]= Integer.parseInt(iterator.next().toString());
-	        i++;
-	    }
-	    int points = cartes_entier[0];
-	    for(int j=1;j<cartes_entier.length;++j) {
-	        if(cartes_entier[j-1]+1 != cartes_entier[j]) {
-	        	points += cartes_entier[j];
-	        }
-	    }
+		int points;
+		if(cartes.size() != 0) {
+		    Iterator iterator = cartes.iterator();
+		    int[] cartes_entier = new int[cartes.size()];
+		    int i =0;
+		    while(iterator.hasNext()) {
+		    	cartes_entier[i]= Integer.parseInt(iterator.next().toString());
+		        i++;
+		    }
+		    points = cartes_entier[0];
+		    for(int j=1;j<cartes_entier.length;++j) {
+		        if(cartes_entier[j-1]+1 != cartes_entier[j]) {
+		        	points += cartes_entier[j];
+		        }
+		    }
+		} else {
+			points = 0;
+		}
 	    return (points- nbJetons);
 	}
 }

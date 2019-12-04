@@ -75,17 +75,10 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 	
 	public void choisirCarte() {
 		System.out.println("nb cartes : " + cartes.size());
-		if(cartes.size() != 0) {
-			Random r = new Random();
-			int rand = r.nextInt(cartes.size());
-			details[0] = Integer.toString(cartes.get(rand));
-			cartes.remove(cartes.get(rand));
-		} else {
-			//fin partie
-			partieLancee = false;
-			calculGagnant();
-			System.out.println("FIN");
-		}
+		Random r = new Random();
+		int rand = r.nextInt(cartes.size());
+		details[0] = Integer.toString(cartes.get(rand));
+		cartes.remove(cartes.get(rand));
 	}
 	
 	private void calculGagnant() {
@@ -208,9 +201,17 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 				break;
 			}
 		}
-		if(partieLancee) {
+		if(cartes.size() != 0) {
+			System.out.println(partieLancee);
 			updatePlateau();
+		} else {
+			System.out.println("FIN");
+			//fin partie
+			partieLancee = false;
+			calculGagnant();
 		}
+		//if(partieLancee) {
+		//}
 	}
 	
 	public void passJoueur(IClient joueur) throws RemoteException {
