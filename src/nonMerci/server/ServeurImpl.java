@@ -246,18 +246,35 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 	
 	public void saveJoueur(IClient joueur) throws RemoteException {
 		System.out.println("Invocation de la m�thode saveJoueur()");
-		if(!partieLancee) {
+		boolean quatrejoueurs = true;
+		if(!partieLancee && joueurs.size() < 5) {
 			if(!joueurExistant(joueur.getName())){
 				joueurs.addElement(new Joueur(joueur));
-				updateUserList();	
-				if(joueurs.size() == 3) {
-					partieLancee = true;
+				updateUserList();
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				long time = System.currentTimeMillis();
+				while (System.currentTimeMillis() < time + 10000 && joueurs.size() >= 3 && joueurs.size() <=5) {
+					if(quatrejoueurs & joueurs.size() == 4) {
+						quatrejoueurs = false;
+						time = System.currentTimeMillis();
+					} else if (joueurs.size() == 5) {
+						time = time - 10000;
+					}
+				}
+				if (joueurs.size() >= 3) {
+					System.out.println("test4");
+					partieLancee = true; 
 					initPartie();
 					updatePlateau();
 				}
 			} else {
-				// TODO : pour l'instant si on a un m�me nom qu'un autre joueur, on se connecte pour
-				// un jeu mais pas sur la m�me partie que le joueur qui porte le m�me nom
+				// TODO : pour l'instant si on a un meme nom qu'un autre joueur, on se connecte pour
+				// un jeu mais pas sur la meme partie que le joueur qui porte le m�me nom
 			}
 		}
 	}

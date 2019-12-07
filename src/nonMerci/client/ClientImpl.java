@@ -35,7 +35,12 @@ public class ClientImpl extends UnicastRemoteObject implements IClient{
 			//Naming.rebind("//localhost:8080/TestRMI"+name, this);
 			serveur = ( IServeur ) Naming.lookup("rmi://localhost:8080/TestRMI");
 			
-			serveur.saveJoueur(this);
+			try {
+				serveur.saveJoueur(this);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} catch (MalformedURLException e) {
 		      e.printStackTrace();
 	    } catch (RemoteException e) {
@@ -75,9 +80,11 @@ public class ClientImpl extends UnicastRemoteObject implements IClient{
 	@Override
 	public void updateJoueurList(String[] joueurs) throws RemoteException {
 		joueurGUI.userPanel.remove(joueurGUI.clientPanel);
+		joueurGUI.userPanel.validate();
 		joueurGUI.setUsersPanel(joueurs);
-		joueurGUI.clientPanel.repaint();
 		joueurGUI.clientPanel.revalidate();
+		joueurGUI.clientPanel.repaint();
+		joueurGUI.clientPanel.updateUI();
 	}
 	
 
