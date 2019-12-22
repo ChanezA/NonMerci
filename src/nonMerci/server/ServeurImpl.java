@@ -6,18 +6,12 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Vector;
+import java.util.*;
 
 import nonMerci.client.IClient;
 
 public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 
-	String line = "---------------------------------------------\n";
 	private Vector<Joueur> joueurs;
 	private List<Integer> cartes;
 	private boolean partieLancee;
@@ -53,13 +47,11 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 	}
 		
 	public void initPartie() {
-		// Mettre � 12 pour test, remettre a 35
 		for(int i=3;i<=35;++i) {
 			cartes.add(i);
 		}
 
 		Random r = new Random();
-		
 		// Retire 9 cartes du jeu
 		for(int i=0;i<10;++i) {
 			cartes.remove(cartes.get(r.nextInt(cartes.size())));
@@ -74,7 +66,6 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 	}
 	
 	public void choisirCarte() {
-		System.out.println("nb cartes : " + cartes.size());
 		Random r = new Random();
 		int rand = r.nextInt(cartes.size());
 		details[0] = Integer.toString(cartes.get(rand));
@@ -91,7 +82,6 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 		int points;
 		for(Joueur j : joueurs){
 			points = j.calculPoint();
-			//points = calculPoint(j);
 	        if(points < min) {
 	        	joueurGagnant = j;
 	        	min = points;
@@ -99,20 +89,7 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 		}	
 		updatePlateauFin(lesjoueurs,joueurGagnant);
 	}
-/*
-	public void saveJoueur(IClient joueur) throws RemoteException {
-		System.out.println("Invocation de la méthode saveJoueur()");
-		if(!partieLancee) {
-			joueurs.addElement(new Joueur(joueur));
-			updateUserList();	
-			if(joueurs.size() == 3) {
-				partieLancee = true;
-				initPartie();
-				updatePlateau();
-			}	
-		}
-	}
-*/	
+
 	private void updateUserList() {
 		String[] currentUsers = null;
 		try {
@@ -120,8 +97,7 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 		} catch (RemoteException e1) {
 			e1.printStackTrace();
 		}
-		
-		//String[] currentUsers = getJoueurList();
+
 		for(Joueur j : joueurs){
 			try {
 				j.getClient().updateJoueurList(currentUsers);
@@ -154,9 +130,6 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 	}
 	
 	private void updatePlateauFin(Map<IClient, Integer>lesjoueurs, Joueur joueur) {
-		// TODO Auto-generated method stub
-		System.out.println("Plateau Fin");
-
 		for(Joueur j : joueurs){
 			try {
 				j.getClient().updatePlateauFin(lesjoueurs,joueur.getClient());
@@ -169,7 +142,6 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 	}
 	
 	public String[] getJoueurList() throws RemoteException {
-		System.out.println("Invocation de la méthode getJoueurList()");
 		String[] joueursList = new String[joueurs.size()];
 		for(int i = 0; i< joueursList.length; i++){
 			joueursList[i] = joueurs.elementAt(i).getClient().getName();
@@ -179,7 +151,6 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 	
 	
 	public void removeJoueur(IClient joueur) throws RemoteException {
-		System.out.println("Invocation de la m�thode removeJoueur()");
 		for(Joueur j : joueurs){
 			if(j.getClient().equals(joueur)){
 				joueurs.remove(j);
@@ -190,32 +161,25 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 	}
   	
 	public void acceptJoueur(IClient joueur) throws RemoteException {
-		System.out.println("Invocation de la m�thode acceptJoueur()");
 		for(Joueur j : joueurs){
 			if(j.getClient().equals(joueur)){
 				j.setNbJetons(j.getNbJetons() + Integer.parseInt(details[1]));
 				j.addCarte(details[0]);
 				details[1] = "0";
 				choisirCarte();
-//				joueurCourant = (joueurCourant + 1) % joueurs.size();
 				break;
 			}
 		}
 		if(cartes.size() != 0) {
-			System.out.println(partieLancee);
 			updatePlateau();
 		} else {
-			System.out.println("FIN");
 			//fin partie
 			partieLancee = false;
 			calculGagnant();
 		}
-		//if(partieLancee) {
-		//}
 	}
 	
 	public void passJoueur(IClient joueur) throws RemoteException {
-		System.out.println("Invocation de la m�thode passJoueur()");
 		for(Joueur j : joueurs){
 			if(j.getClient().equals(joueur)){
 				if(j.getNbJetons()==0) {
@@ -233,7 +197,6 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 
 	@Override
 	public boolean joueurExistant(String name) throws RemoteException {
-		System.out.println("Invocation de la m�thode joueurExistant()");
 		boolean test = false;
 		for(Joueur j : joueurs){
 			if(j.getClient().getName().equals(name)){
@@ -245,7 +208,6 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 	}
 	
 	public void saveJoueur(IClient joueur) throws RemoteException {
-		System.out.println("Invocation de la m�thode saveJoueur()");
 		boolean quatrejoueurs = true;
 		if(!partieLancee && joueurs.size() < 5) {
 			if(!joueurExistant(joueur.getName())){
@@ -254,7 +216,6 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 				try {
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				long time = System.currentTimeMillis();
@@ -267,14 +228,13 @@ public class ServeurImpl extends UnicastRemoteObject implements IServeur {
 					}
 				}
 				if (joueurs.size() >= 3) {
-					System.out.println("test4");
 					partieLancee = true; 
 					initPartie();
 					updatePlateau();
 				}
 			} else {
 				// TODO : pour l'instant si on a un meme nom qu'un autre joueur, on se connecte pour
-				// un jeu mais pas sur la meme partie que le joueur qui porte le m�me nom
+				// un jeu mais pas sur la meme partie que le joueur qui porte le meme nom
 			}
 		}
 	}
